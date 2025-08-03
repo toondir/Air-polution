@@ -22,7 +22,7 @@ const width = svgWidth - m_left - m_right;
 const height = svgHeight - m_top - m_bottom;
 
 const svg = d3
-  .select("#chart-svg")
+  .select("#svgbox")
   .attr("width", svgWidth)
   .attr("height", svgHeight);
 
