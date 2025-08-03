@@ -1,4 +1,4 @@
-let viewMode = "overview";
+let viewPage = "overview";
 let selectedCountry = null;
 let selectedCity = null;
 let allData = [];
@@ -54,10 +54,10 @@ d3.csv("global_air_pollution_data.csv").then((data) => {
 });
 
 function mainVis() {
-  prevButton.classed("hidden", viewMode !== "overview");
-  nextButton.classed("hidden", viewMode !== "overview");
+  prevButton.classed("hidden", viewPage !== "overview");
+  nextButton.classed("hidden", viewPage !== "overview");
 
-  switch (viewMode) {
+  switch (viewPage) {
     case "overview":
       overviewscene();
       break;
@@ -116,6 +116,7 @@ function overviewscene() {
       0,
       Math.floor((overviewData.length - 1) * 0.1),
       Math.floor((overviewData.length - 1) * 0.2),
+      Math.floor((overviewData.length - 1) * 0.29),
       Math.floor((overviewData.length - 1) * 0.4),
       Math.floor((overviewData.length - 1) * 0.6),
       Math.floor((overviewData.length - 1) * 0.8),
@@ -162,7 +163,7 @@ function overviewscene() {
     .attr("fill", (d, i) => colorScale(startIndex + i))
     .on("click", (event, d) => {
       tooltip.classed("hidden", true);
-      viewMode = "countryDetail";
+      viewPage = "countryDetail";
       selectedCountry = d.country;
       mainVis();
     })
@@ -181,6 +182,47 @@ function overviewscene() {
       d3.select(this).style("stroke", null).style("stroke-width", null);
       tooltip.classed("hidden", true);
     });
+
+  const avgAQIAll = d3.mean(overviewData, (d) => d.avg_aqi);
+
+  barchart.selectAll(".aqi-info-box").remove();
+
+  const infoBoxWidth = 180;
+  const infoBoxHeight = 66;
+
+  const infoBox = barchart
+    .append("g")
+    .attr("class", "aqi-info-box")
+    .attr("transform", `translate(${width - infoBoxWidth - 10}, 10)`);
+
+  infoBox
+    .append("rect")
+    .attr("width", infoBoxWidth)
+    .attr("height", infoBoxHeight)
+    .attr("fill", "#fff")
+    .attr("stroke", "#1a237e")
+    .attr("stroke-width", 1.5)
+    .attr("rx", 8)
+    .attr("ry", 8)
+    .attr("opacity", 0.95);
+
+  infoBox
+    .append("text")
+    .attr("x", 24)
+    .attr("y", 24)
+    .attr("font-size", "1em")
+    .attr("font-weight", "bold")
+    .attr("fill", "#1a237e")
+    .text("Global Avg AQI");
+
+  infoBox
+    .append("text")
+    .attr("x", 64)
+    .attr("y", 47)
+    .attr("font-size", "1em")
+    .attr("font-weight", "bold")
+    .attr("fill", "#e53935")
+    .text(avgAQIAll.toFixed(2));
 
   if (currentPage === 0) {
     const highestCountry = paginatedData[0];
@@ -259,7 +301,7 @@ function CountryScene() {
     .attr("fill", (d, i) => cityColorScale(i))
     .on("click", (event, d) => {
       tooltip.classed("hidden", true);
-      viewMode = "cityDetail";
+      viewPage = "cityDetail";
       selectedCity = d.city_name;
       mainVis();
     })
@@ -370,10 +412,10 @@ function CityScene() {
 }
 
 backButton.on("click", () => {
-  if (viewMode === "cityDetail") {
-    viewMode = "countryDetail";
-  } else if (viewMode === "countryDetail") {
-    viewMode = "overview";
+  if (viewPage === "cityDetail") {
+    viewPage = "countryDetail";
+  } else if (viewPage === "countryDetail") {
+    viewPage = "overview";
   }
   mainVis();
 });
