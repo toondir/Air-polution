@@ -129,7 +129,8 @@ function overviewscene() {
       "#fff176",
       "#ffffff",
       "#90caf9",
-      "#1a237e",
+      "#1c28a7ff",
+      "#20265eff",
     ]);
 
   const xAxis = d3.axisBottom(xScale);
