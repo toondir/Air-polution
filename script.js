@@ -73,7 +73,7 @@ function mainVis() {
 function overviewscene() {
   Title.text("Global Air Quality Overview");
   description.text(
-    "Some countries have greater air pollution than others. This chart shows the average Air Quality Index (AQI) by country. Higher values indicate worse air quality. Click a country to view more details."
+    "Some countries have greater air pollution than others. This chart shows the average Air Quality Index (AQI) by country. Higher AQI values indicate worse air quality. Click a country to view more details."
   );
   backButton.classed("hidden", true);
 
